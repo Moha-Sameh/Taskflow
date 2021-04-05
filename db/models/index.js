@@ -43,4 +43,57 @@ Object.keys(db).forEach((modelName) => {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
+//Employee association
+db.Employee.belongsTo(db.Employee, {
+  as: "manager",
+  foreignKey: "managerId",
+  useJunctionTable: false,
+});
+
+db.Employee.belongsToMany(db.Task, {
+  through: "employeeTasks",
+  as: "tasks",
+  foreignKey: "employeeId",
+});
+
+db.Task.belongsToMany(db.Employee, {
+  through: "employeeTasks",
+  as: "employees",
+  foreignKey: "taskId",
+});
+
+//department association
+db.Department.hasMany(db.Employee, {
+  foreignKey: {
+    name: "depId",
+    as: "employees",
+    allowNull: false,
+  },
+});
+
+db.Employee.belongsTo(db.Department, {
+  foreignKey: {
+    name: "depId",
+    as: "department",
+    allowNull: false,
+  },
+});
+
+//Task and Project association
+db.Project.hasMany(db.Task, {
+  foreignKey: {
+    name: "projectId",
+    as: "tasks",
+    allowNull: false,
+  },
+});
+
+db.Task.belongsTo(db.Project, {
+  foreignKey: {
+    name: "projectId",
+    as: "project",
+    allowNull: false,
+  },
+});
+
 module.exports = db;

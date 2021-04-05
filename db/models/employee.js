@@ -1,14 +1,14 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class EMPLOYEE extends Model {
+  class Employee extends Model {
     static associate(models) {
       // define association here
     }
   }
-  EMPLOYEE.init(
+  Employee.init(
     {
-      ename: {
+      uname: {
         type: DataTypes.STRING,
         unique: {
           args: true,
@@ -23,11 +23,12 @@ module.exports = (sequelize, DataTypes) => {
       gender: DataTypes.STRING,
       role: DataTypes.STRING,
       jobTitle: DataTypes.STRING,
+      image: DataTypes.STRING,
     },
     {
       sequelize,
-      modelName: "EMPLOYEE",
+      modelName: "Employee",
     }
   );
-  return EMPLOYEE;
+  return Employee;
 };
