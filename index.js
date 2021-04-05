@@ -4,9 +4,10 @@ const cors = require("cors");
 const app = express();
 const path = require("path");
 const passport = require("passport");
-//Controller Require
-const EmployeeRoutes = require("./src/controller/EmployeeController");
-const TaskRoutes = require("./src/controller/TaskController");
+
+//router Require
+const EmployeeRoutes = require("./src/router/EmployeeRouter");
+const TaskRoutes = require("./src/router/TaskRouter");
 
 // Passport Strategies
 const { localStrategy, jwtStrategy } = require("./src/middleWare/passport");
@@ -31,6 +32,8 @@ app.use((err, req, res, next) => {
 //Routes
 app.use("/Employee", EmployeeRoutes);
 app.use("/Task", TaskRoutes);
+
+//multer middleware
 app.use("/media", express.static(path.join(__dirname, "media")));
 app.use((err, req, res, next) => {
   res.status(err.status || 500);
