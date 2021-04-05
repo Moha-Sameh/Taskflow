@@ -2,15 +2,48 @@ const express = require("express");
 const db = require("./db/models");
 const cors = require("cors");
 const app = express();
+const path = require("path");
+const passport = require("passport");
+//Controller Require
+const EmployeeRoutes = require("./src/controller/EmployeeController");
+const TaskRoutes = require("./src/controller/TaskController");
+
+// Passport Strategies
+const { localStrategy, jwtStrategy } = require("./src/middleWare/passport");
+
+// Passport Setup
+
+app.use(passport.initialize());
+passport.use(localStrategy);
+passport.use(jwtStrategy);
 
 //middleware
 app.use(cors());
 app.use(express.json());
-
-app.get("/", (req, res) => {
-  res.send("<h1>Hello World<h1>");
+app.use((err, req, res, next) => {
+  res.status(err.status || 500);
+  res.json({
+    message: err.message || "Internal Server Error",
+  });
+  next(err);
 });
 
+//Routes
+app.use("/Employee", EmployeeRoutes);
+app.use("/Task", TaskRoutes);
+app.use("/media", express.static(path.join(__dirname, "media")));
+app.use((err, req, res, next) => {
+  res.status(err.status || 500);
+  res.json({
+    message: err.message || "Internal Server Error",
+  });
+  next(err);
+});
+app.use((req, res, next) => {
+  res.status(404).json({ message: "Path not found" });
+});
+
+//App function
 const run = async () => {
   try {
     await db.sequelize.sync({ force: false });
