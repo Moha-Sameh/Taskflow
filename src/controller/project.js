@@ -1,10 +1,8 @@
-const { PROJECT } = require("../../db/models");
-// const Tutorial = db.tutorials;
-// const Op = db.Sequelize.Op;
+const { Project } = require("../../db/models");
 
 exports.fetchProject = async (req, res) => {
   try {
-    const projects = await PROJECT.findAll();
+    const projects = await Project.findAll();
     res.json(projects);
   } catch (err) {
     res.json(err);
@@ -13,7 +11,7 @@ exports.fetchProject = async (req, res) => {
 
 exports.createProject = async (req, res) => {
   try {
-    const newProject = await PROJECT.create(req.body);
+    const newProject = await Project.create(req.body);
     res.status(201).json(newProject);
   } catch (err) {
     res.json(err);
@@ -23,7 +21,7 @@ exports.createProject = async (req, res) => {
 exports.deleteProject = async (req, res) => {
   try {
     // console.log(req.params.id);
-    await PROJECT.destroy({
+    await Project.destroy({
       where: {
         id: req.params.id,
       },

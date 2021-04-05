@@ -2,8 +2,6 @@ const express = require("express");
 const db = require("./db/models");
 const cors = require("cors");
 const app = express();
-
-
 const path = require("path");
 const passport = require("passport");
 
@@ -19,7 +17,6 @@ const { localStrategy, jwtStrategy } = require("./src/middleWare/passport");
 app.use(passport.initialize());
 passport.use(localStrategy);
 passport.use(jwtStrategy);
-
 
 //middleware
 app.use(cors());
@@ -37,7 +34,6 @@ app.use("/Employee", EmployeeRoutes);
 app.use("/Task", TaskRoutes);
 app.use("/project", ProjectRoutes);
 
-
 //multer middleware
 app.use("/media", express.static(path.join(__dirname, "media")));
 app.use((err, req, res, next) => {
@@ -50,8 +46,6 @@ app.use((err, req, res, next) => {
 app.use((req, res, next) => {
   res.status(404).json({ message: "Path not found" });
 });
-
-
 
 //App function
 const run = async () => {
