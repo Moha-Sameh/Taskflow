@@ -13,7 +13,7 @@ app.get("/", (req, res) => {
 
 const run = async () => {
   try {
-    await db.sequelize.sync({ force: false });
+    await db.sequelize.sync({ force: true });
     console.log("Connection to the database successful!");
   } catch (error) {
     console.error("Error connecting to the database: ", error);
