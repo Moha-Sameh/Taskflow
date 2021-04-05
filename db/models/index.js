@@ -62,6 +62,7 @@ db.Task.belongsToMany(db.Employee, {
   foreignKey: "taskId",
 });
 
+//department association
 db.Department.hasMany(db.Employee, {
   foreignKey: {
     name: "depId",
