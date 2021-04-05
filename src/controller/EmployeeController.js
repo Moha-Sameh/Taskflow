@@ -1,4 +1,4 @@
-const { Employee } = require("../db/models");
+const { Employee } = require("../../db/models");
 
 exports.fetchEmployee = async (employeeId, next) => {
   try {

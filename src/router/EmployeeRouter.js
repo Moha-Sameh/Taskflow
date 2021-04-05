@@ -1,5 +1,7 @@
 const express = require("express");
 const router = express.Router();
+const passport = require("passport");
+
 // controllers
 const {
   employeeCreate,
@@ -8,6 +10,7 @@ const {
   employeeDelete,
   fetchEmployee,
 } = require("../controller/EmployeeController");
+const upload = require("../middleWare/multer");
 
 router.param("employeeId", async (req, res, next, employeeId) => {
   const emplyee = await fetchEmployee(employeeId, next);

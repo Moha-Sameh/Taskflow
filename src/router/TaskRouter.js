@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const passport = require("passport");
 // controllers
 const {
   employeeCreate,
@@ -27,7 +28,6 @@ router.get("/", employeeList);
 router.post(
   "/",
   passport.authenticate("jwt", { session: false }),
-  upload.single("image"),
   employeeCreate
 );
 // router.post(
@@ -40,6 +40,6 @@ router.post(
 router.delete("/:employeeId", employeeDelete);
 
 // Updating Products
-router.put("/:employeeId", upload.single("image"), employeeUpdate);
+router.put("/:employeeId", employeeUpdate);
 
 module.exports = router;
