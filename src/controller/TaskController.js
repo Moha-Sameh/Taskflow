@@ -8,7 +8,7 @@ exports.fetchTask = async (taskId, next) => {
     next(error);
   }
 };
-exports.taskCreate = async (req, res, next) => {
+exports.createTask = async (req, res, next) => {
   try {
     const newTask = await Task.create(req.body);
     res.status(201).json(newTask);
@@ -17,7 +17,7 @@ exports.taskCreate = async (req, res, next) => {
   }
 };
 
-exports.employeeList = async (req, res, next) => {
+exports.viewTasks = async (req, res, next) => {
   try {
     const tasks = await Task.findAll({
       attributes: { exclude: ["createdAt", "updatedAt"] },
@@ -28,7 +28,7 @@ exports.employeeList = async (req, res, next) => {
     next(error);
   }
 };
-exports.taskDelete = async (req, res, next) => {
+exports.dropTask = async (req, res, next) => {
   try {
     await req.task.destroy();
     res.status(204).end();
@@ -37,7 +37,7 @@ exports.taskDelete = async (req, res, next) => {
   }
 };
 
-exports.taskUpdate = async (req, res, next) => {
+exports.updateTask = async (req, res, next) => {
   try {
     await req.task.update(req.body);
     res.status(204).end();
