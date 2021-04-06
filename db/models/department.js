@@ -8,9 +8,9 @@ module.exports = (sequelize, DataTypes) => {
   }
   Department.init(
     {
-      depName: DataTypes.STRING,
-      depLocation: DataTypes.STRING,
-      depManager: DataTypes.STRING,
+      name: DataTypes.STRING,
+      location: DataTypes.STRING,
+      manager: DataTypes.STRING,
     },
     {
       sequelize,

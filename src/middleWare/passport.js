@@ -1,26 +1,30 @@
+//import authentication strategies
 const LocalStrategy = require("passport-local").Strategy;
 const bcrypt = require("bcrypt");
 const { fromAuthHeaderAsBearerToken } = require("passport-jwt").ExtractJwt;
 const JWTStrategy = require("passport-jwt").Strategy;
+const { Employee } = require("../../db/models");
+
+//Local Strategy
 exports.localStrategy = new LocalStrategy(async (username, password, done) => {
   try {
-    const user = await User.findOne({
+    //find user by username
+    const user = await Employee.findOne({
       where: { username },
     });
-
+    //password validation
     const passwordsMatch = user
       ? await bcrypt.compare(password, user.password)
       : false;
 
-    if (passwordsMatch) {
-      return done(null, user);
-    }
-    return done(null, false);
+    if (passwordsMatch) return done(null, user);
+    return done(null, false, { message: "Incorrect password." });
   } catch (error) {
     done(error);
   }
 });
 
+//JWT strategy
 exports.jwtStrategy = new JWTStrategy(
   {
     jwtFromRequest: fromAuthHeaderAsBearerToken(),
@@ -28,11 +32,11 @@ exports.jwtStrategy = new JWTStrategy(
   },
   async (jwtPayload, done) => {
     if (Date.now() > jwtPayload.exp) {
-      return done(null, false); // this will throw a 401
+      return done(null, false);
     }
     try {
-      const user = await User.findByPk(jwtPayload.id);
-      done(null, user); // if there is no user, this will throw a 401
+      const user = await Employee.findByPk(jwtPayload.id);
+      done(null, user);
     } catch (error) {
       done(error);
     }

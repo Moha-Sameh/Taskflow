@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   Task.init(
     {
-      taskDetails: DataTypes.STRING,
+      details: DataTypes.STRING,
       complete: DataTypes.BOOLEAN,
     },
     {

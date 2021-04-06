@@ -8,8 +8,8 @@ module.exports = (sequelize, DataTypes) => {
   }
   Project.init(
     {
-      projectName: DataTypes.STRING,
-      projectCode: DataTypes.INTEGER,
+      name: DataTypes.STRING,
+      code: DataTypes.INTEGER,
     },
     {
       sequelize,

@@ -3,17 +3,18 @@ const router = express.Router();
 const passport = require("passport");
 // controllers
 const {
-  employeeCreate,
-  employeeList,
-  employeeUpdate,
-  employeeDelete,
-  fetchEmployee,
-} = require("../controller/EmployeeController");
+  fetchTask,
+  viewTasks,
+  createTask,
+  dropTask,
+  updateTask,
+  findProject,
+} = require("../controller/TaskController");
 
-router.param("employeeId", async (req, res, next, employeeId) => {
-  const emplyee = await fetchBooking(employeeId, next);
-  if (emplyee) {
-    req.emplyee = emplyee;
+router.param("id", async (req, res, next, id) => {
+  const task = await fetchTask(id, next);
+  if (task) {
+    req.task = task;
     next();
   } else {
     const err = new Error("Employee ID must be wrong please try again");
@@ -21,25 +22,15 @@ router.param("employeeId", async (req, res, next, employeeId) => {
     next(err);
   }
 });
-// Product list
-router.get("/", employeeList);
 
-// Adding Products
+router.get("/", viewTasks);
 router.post(
   "/",
   passport.authenticate("jwt", { session: false }),
-  employeeCreate
+  findProject,
+  createTask
 );
-// router.post(
-//   "/:hotelId/Rooms",
-//   passport.authenticate("jwt", { session: false }),
-//   roomsCreate
-// );
-
-// Deleting Products
-router.delete("/:employeeId", employeeDelete);
-
-// Updating Products
-router.put("/:employeeId", employeeUpdate);
+router.delete("/:employeeId", dropTask);
+router.put("/:employeeId", updateTask);
 
 module.exports = router;

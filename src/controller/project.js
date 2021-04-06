@@ -1,4 +1,4 @@
-const { Project } = require("../../db/models");
+const { Project, Task } = require("../../db/models");
 
 exports.fetchProject = async (req, res) => {
   try {
@@ -31,5 +31,22 @@ exports.deleteProject = async (req, res) => {
       .json({ messege: `project with id ${req.params.id} deleted` });
   } catch (err) {
     res.json(err);
+  }
+};
+
+//View Project
+exports.viewProject = async (req, res, next) => {
+  try {
+    const projects = await Project.findAll({
+      attributes: { exclude: ["createdAt", "updatedAt"] },
+      include: {
+        model: Task,
+        as: "tasks",
+        attributes: ["id", "details", "complete"],
+      },
+    });
+    res.json(projects);
+  } catch (error) {
+    next(error);
   }
 };

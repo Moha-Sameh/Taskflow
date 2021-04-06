@@ -4,45 +4,34 @@ const passport = require("passport");
 
 // controllers
 const {
-  employeeCreate,
-  employeeList,
-  employeeUpdate,
-  employeeDelete,
+  createEmployee,
+  viewEmployees,
+  updateEmployee,
+  dropEmployee,
   fetchEmployee,
+  findDepartment,
+  signInEmployee,
 } = require("../controller/EmployeeController");
 const upload = require("../middleWare/multer");
 
-router.param("employeeId", async (req, res, next, employeeId) => {
-  const emplyee = await fetchEmployee(employeeId, next);
-  if (emplyee) {
-    req.emplyee = emplyee;
-    next();
-  } else {
-    const err = new Error("Employee ID must be wrong please try again");
-    err.status = 404;
-    next(err);
-  }
+//Router param
+router.param("id", async (req, res, next, id) => {
+  const emplyee = await fetchEmployee(id, next);
+  emplyee
+    ? (req.emplyee = emplyee && next())
+    : (err = new Error("Employee ID must be wrong please try again"));
+  err.status = 404;
+  next(err);
 });
-// Product list
-router.get("/", employeeList);
-
-// Adding Products
+// Routes
+router.get("/", viewEmployees);
+router.post("/", upload.single("image"), findDepartment, createEmployee);
 router.post(
-  "/",
-  passport.authenticate("jwt", { session: false }),
-  upload.single("image"),
-  employeeCreate
+  "/login",
+  passport.authenticate("local", { session: false }),
+  signInEmployee
 );
-// router.post(
-//   "/:hotelId/Rooms",
-//   passport.authenticate("jwt", { session: false }),
-//   roomsCreate
-// );
-
-// Deleting Products
-router.delete("/:employeeId", employeeDelete);
-
-// Updating Products
-router.put("/:employeeId", upload.single("image"), employeeUpdate);
+router.delete("/:id", dropEmployee);
+router.put("/:id", upload.single("image"), updateEmployee);
 
 module.exports = router;

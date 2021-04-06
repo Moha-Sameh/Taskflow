@@ -118,3 +118,6 @@ dist
 
 #env
 .env
+
+#media file ignore
+media/*
