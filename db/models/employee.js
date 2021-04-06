@@ -8,15 +8,15 @@ module.exports = (sequelize, DataTypes) => {
   }
   Employee.init(
     {
-      uname: {
+      username: {
         type: DataTypes.STRING,
         unique: {
           args: true,
           msg: "Username already exists",
         },
       },
-      fname: DataTypes.STRING,
-      lname: DataTypes.STRING,
+      firstName: DataTypes.STRING,
+      lastName: DataTypes.STRING,
       email: DataTypes.STRING,
       password: DataTypes.STRING,
       phoneNumber: DataTypes.STRING,

@@ -65,35 +65,35 @@ db.Task.belongsToMany(db.Employee, {
 //department association
 db.Department.hasMany(db.Employee, {
   foreignKey: {
-    name: "depId",
-    as: "employees",
+    name: "departmentId",
     allowNull: false,
   },
+  as: "employees",
 });
 
 db.Employee.belongsTo(db.Department, {
   foreignKey: {
-    name: "depId",
-    as: "department",
+    name: "departmentId",
     allowNull: false,
   },
+  as: "department",
 });
 
 //Task and Project association
 db.Project.hasMany(db.Task, {
   foreignKey: {
     name: "projectId",
-    as: "tasks",
     allowNull: false,
   },
+  as: "tasks",
 });
 
 db.Task.belongsTo(db.Project, {
   foreignKey: {
     name: "projectId",
-    as: "project",
     allowNull: false,
   },
+  as: "project",
 });
 
 module.exports = db;

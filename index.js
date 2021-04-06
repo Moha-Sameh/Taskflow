@@ -9,14 +9,11 @@ const passport = require("passport");
 const EmployeeRoutes = require("./src/router/EmployeeRouter");
 const TaskRoutes = require("./src/router/TaskRouter");
 const ProjectRoutes = require("./src/router/project");
+const DepartmentRoutes = require("./src/router/DepartmentRouter");
+const EmployeeTaskRoutes = require("./src/router/EmployeeTask");
 
 // Passport Strategies
 const { localStrategy, jwtStrategy } = require("./src/middleWare/passport");
-
-// Passport Setup
-app.use(passport.initialize());
-passport.use(localStrategy);
-passport.use(jwtStrategy);
 
 //middleware
 app.use(cors());
@@ -26,13 +23,21 @@ app.use((err, req, res, next) => {
   res.json({
     message: err.message || "Internal Server Error",
   });
+  console.log(err);
   next(err);
 });
+
+// Passport Setup
+app.use(passport.initialize());
+passport.use(localStrategy);
+passport.use(jwtStrategy);
 
 //Routes
 app.use("/Employee", EmployeeRoutes);
 app.use("/Task", TaskRoutes);
-app.use("/project", ProjectRoutes);
+app.use("/Project", ProjectRoutes);
+app.use("/Department", DepartmentRoutes);
+app.use("/Employeetask", EmployeeTaskRoutes);
 
 //multer middleware
 app.use("/media", express.static(path.join(__dirname, "media")));

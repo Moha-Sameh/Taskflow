@@ -1,4 +1,6 @@
 const { Employee, Department } = require("../../db/models");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 //find employee middleWare
 exports.fetchEmployee = async (id, next) => {
@@ -21,7 +23,7 @@ exports.findDepartment = async (req, _, next) => {
     req.department = department;
     next();
   } catch (error) {
-    next(erorr);
+    next(error);
   }
 };
 
@@ -30,9 +32,33 @@ exports.createEmployee = async (req, res, next) => {
     if (req.file) {
       req.body.image = `http://${req.get("host")}/media/${req.file.filename}`;
     }
-    req.body.departmentID = req.Department.id;
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    req.body.departmentId = req.department.id;
+    req.body.password = hashedPassword;
     const newEmployee = await Employee.create(req.body);
-    res.status(201).json(newEmployee);
+    const payload = {
+      id: newEmployee.id,
+      username: newEmployee.username,
+      exp: Date.now() + process.env.JWT_EXPIRATION_MS,
+    };
+    const token = jwt.sign(JSON.stringify(payload), process.env.JWT_SECRET);
+    res.status(201).json({ token });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.signInEmployee = (req, res, next) => {
+  try {
+    const { user } = req;
+    const payload = {
+      id: user.id,
+      username: user.username,
+      role: user.role,
+      exp: Date.now() + parseInt(process.env.JWT_EXPIRATION_MS),
+    };
+    const token = jwt.sign(JSON.stringify(payload), process.env.JWT_SECRET);
+    res.json({ token });
   } catch (error) {
     next(error);
   }
@@ -45,7 +71,7 @@ exports.viewEmployees = async (req, res, next) => {
       include: {
         model: Department,
         as: "department",
-        attributes: ["depName"],
+        attributes: ["name"],
       },
     });
     res.json(employees);
@@ -55,7 +81,7 @@ exports.viewEmployees = async (req, res, next) => {
 };
 exports.dropEmployee = async (req, res, next) => {
   try {
-    await req.employee.destroy();
+    await req.Employee.destroy();
     res.status(204).end();
   } catch (err) {
     next(error);
@@ -64,7 +90,7 @@ exports.dropEmployee = async (req, res, next) => {
 
 exports.updateEmployee = async (req, res, next) => {
   try {
-    await req.employee.update(req.body);
+    await req.Employee.update(req.body);
     res.status(204).end();
   } catch (err) {
     next(error);

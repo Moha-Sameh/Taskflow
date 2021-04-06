@@ -10,6 +10,7 @@ const {
   dropEmployee,
   fetchEmployee,
   findDepartment,
+  signInEmployee,
 } = require("../controller/EmployeeController");
 const upload = require("../middleWare/multer");
 
@@ -24,12 +25,11 @@ router.param("id", async (req, res, next, id) => {
 });
 // Routes
 router.get("/", viewEmployees);
+router.post("/", upload.single("image"), findDepartment, createEmployee);
 router.post(
-  "/",
-  passport.authenticate("jwt", { session: false }),
-  upload.single("image"),
-  findDepartment,
-  createEmployee
+  "/login",
+  passport.authenticate("local", { session: false }),
+  signInEmployee
 );
 router.delete("/:id", dropEmployee);
 router.put("/:id", upload.single("image"), updateEmployee);

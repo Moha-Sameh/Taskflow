@@ -8,6 +8,7 @@ const {
   createTask,
   dropTask,
   updateTask,
+  findProject,
 } = require("../controller/TaskController");
 
 router.param("id", async (req, res, next, id) => {
@@ -23,7 +24,12 @@ router.param("id", async (req, res, next, id) => {
 });
 
 router.get("/", viewTasks);
-router.post("/", passport.authenticate("jwt", { session: false }), createTask);
+router.post(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  findProject,
+  createTask
+);
 router.delete("/:employeeId", dropTask);
 router.put("/:employeeId", updateTask);
 

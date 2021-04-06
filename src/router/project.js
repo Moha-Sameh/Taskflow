@@ -1,13 +1,13 @@
 const express = require("express");
 const {
-  fetchProject,
   createProject,
   deleteProject,
+  viewProject,
 } = require("../controller/project.js");
 
 const router = express.Router();
 
-router.get("/", fetchProject);
+router.get("/", viewProject);
 router.post("/", createProject);
 router.delete("/:id", deleteProject);
 
