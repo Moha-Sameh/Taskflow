@@ -43,13 +43,13 @@ Object.keys(db).forEach((modelName) => {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
-//Employee association
+//Employee self join association
 db.Employee.belongsTo(db.Employee, {
   as: "manager",
   foreignKey: "managerId",
   useJunctionTable: false,
 });
-
+//Employee many to many relation with tasks
 db.Employee.belongsToMany(db.Task, {
   through: "employeeTasks",
   as: "tasks",
@@ -59,6 +59,13 @@ db.Employee.belongsToMany(db.Task, {
 db.Task.belongsToMany(db.Employee, {
   through: "employeeTasks",
   as: "employees",
+  foreignKey: "taskId",
+});
+
+db.employeeTasks.belongsTo(db.Employee, {
+  foreignKey: "employeeId",
+});
+db.employeeTasks.belongsTo(db.Task, {
   foreignKey: "taskId",
 });
 
