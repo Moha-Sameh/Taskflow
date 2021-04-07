@@ -1,4 +1,4 @@
-const { Employee, Task, employeeTasks } = require("../../db/models");
+const { Employee, Task, employeeTasks, Project } = require("../../db/models");
 
 exports.findTask = async (req, _, next) => {
   try {
@@ -28,10 +28,22 @@ exports.employeeAssigment = async (req, res, next) => {
 exports.viewEmployeeTask = async (_, res, next) => {
   try {
     const assiegnedTasks = await employeeTasks.findAll({
-      attributes: { exclude: ["updatedAt"] },
+      attributes: { exclude: ["updatedAt", "createdAt"] },
       include: {
         model: Employee,
-        include: Task,
+        as: "Employee",
+        include: {
+          model: Task,
+          as: "tasks",
+          attributes: {
+            exclude: ["updatedAt", "createdAt", "id", "projectId"],
+          },
+          include: {
+            model: Project,
+            as: "project",
+            attributes: { exclude: ["updatedAt", "createdAt", "id"] },
+          },
+        },
       },
     });
 
