@@ -10,6 +10,8 @@ module.exports = (sequelize, DataTypes) => {
     {
       details: DataTypes.STRING,
       complete: DataTypes.BOOLEAN,
+      startDate: DataTypes.STRING,
+      deadLine: DataTypes.STRING,
     },
     {
       sequelize,

@@ -55,6 +55,7 @@ exports.signInEmployee = (req, res, next) => {
       id: user.id,
       username: user.username,
       role: user.role,
+      manager: user.manager,
       exp: Date.now() + parseInt(process.env.JWT_EXPIRATION_MS),
     };
     const token = jwt.sign(JSON.stringify(payload), process.env.JWT_SECRET);
