@@ -1,10 +1,9 @@
 module.exports = {
   development: {
-    username: db,
-    password: tv4l3qljbbsv7swt,
-    database: db,
-    host:
-      "app-74bd10b1-463f-4bf5-b7f5-04e2d0d8c403-do-user-9046966-0.b.db.ondigitalocean.com",
+    username: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    host: process.env.DB_HOST,
     dialect: "postgres",
     logging: false,
   },
