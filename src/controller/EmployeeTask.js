@@ -32,6 +32,18 @@ exports.viewEmployeeTask = async (_, res, next) => {
       include: {
         model: Employee,
         as: "Employee",
+        attributes: {
+          exclude: [
+            "updatedAt",
+            "createdAt",
+            "id",
+            "projectId",
+            "password",
+            "departmentId",
+            "phoneNumber",
+            "email",
+          ],
+        },
         include: {
           model: Task,
           as: "tasks",
