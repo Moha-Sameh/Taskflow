@@ -33,17 +33,11 @@ passport.use(localStrategy);
 passport.use(jwtStrategy);
 
 //Routes
-app.use("https://taskflow-rce5b.ondigitalocean.app/Employee", EmployeeRoutes);
-app.use("https://taskflow-rce5b.ondigitalocean.app/Task", TaskRoutes);
-app.use("https://taskflow-rce5b.ondigitalocean.app/Project", ProjectRoutes);
-app.use(
-  "https://taskflow-rce5b.ondigitalocean.app/Department",
-  DepartmentRoutes
-);
-app.use(
-  "https://taskflow-rce5b.ondigitalocean.app/Employeetask",
-  EmployeeTaskRoutes
-);
+app.use("/Employee", EmployeeRoutes);
+app.use("/Task", TaskRoutes);
+app.use("/Project", ProjectRoutes);
+app.use("/Department", DepartmentRoutes);
+app.use("/Employeetask", EmployeeTaskRoutes);
 
 //multer middleware
 app.use("/media", express.static(path.join(__dirname, "media")));
