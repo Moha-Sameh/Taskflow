@@ -1,6 +1,7 @@
 const { Employee, Department } = require("../../db/models");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const { unsubscribe } = require("../router/TaskRouter");
 
 //find employee middleWare
 exports.fetchEmployee = async (id, next) => {
@@ -39,9 +40,11 @@ exports.createEmployee = async (req, res, next) => {
     const payload = {
       id: newEmployee.id,
       username: newEmployee.username,
-      exp: Date.now() + process.env.JWT_EXPIRATION_MS,
+      exp: Date.now() + { use_env_variable: "JWT_EXPIRATION_MS" },
     };
-    const token = jwt.sign(JSON.stringify(payload), process.env.JWT_SECRET);
+    const token = jwt.sign(JSON.stringify(payload), {
+      use_env_variable: "JWT_SECRET",
+    });
     res.status(201).json({ token });
   } catch (error) {
     next(error);
@@ -57,9 +60,12 @@ exports.signInEmployee = (req, res, next) => {
       role: user.role,
       manager: user.manager,
       image: user.image,
-      exp: Date.now() + parseInt(process.env.JWT_EXPIRATION_MS),
+      firstName: user.firstName,
+      exp: Date.now() + parseInt({ use_env_variable: "JWT_EXPIRATION_MS" }),
     };
-    const token = jwt.sign(JSON.stringify(payload), process.env.JWT_SECRET);
+    const token = jwt.sign(JSON.stringify(payload), {
+      use_env_variable: "JWT_SECRET",
+    });
     res.json({ token });
   } catch (error) {
     next(error);
